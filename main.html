@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Smart Room Automation</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Rajdhani:wght@500;600;700&display=swap" />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+
+  <link rel="stylesheet" href="./css/main.css" />
+</head>
+<body class="manual-mode">
+
+<div class="main-container" id="content-wrapper">
+  <div class="side-menu-overlay" id="side-menu-overlay" onclick="toggleMenu()">
+      <aside class="side-menu" id="side-menu" onclick="event.stopPropagation()">
+        <div class="side-menu__top">
+          <div class="side-menu__brand">
+            <div class="side-menu__brand-icon">
+              <span class="material-symbols-outlined">analytics</span>
+            </div>
+            <span class="side-menu__brand-title">Menu</span>
+          </div>
+          <button class="side-menu__close" type="button" onclick="toggleMenu()" aria-label="Close menu">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <nav class="side-menu__nav">
+          <a class="nav-link nav-link--active" href="./main.html">
+            <span class="material-symbols-outlined">grid_view</span>
+            <span>Dashboard</span>
+          </a>
+          <a class="nav-link" href="./history.html">
+            <span class="material-symbols-outlined">analytics</span>
+            <span>Activity Log</span>
+          </a>
+          <a class="nav-link" href="./power.html">
+            <span class="material-symbols-outlined material-symbols-outlined--filled">show_chart</span>
+            <span>Chart</span>
+          </a>
+        </nav>
+
+        <div class="side-menu__footer">
+          <div class="side-menu__user">
+            <div class="side-menu__avatar">
+              <div class="side-menu__avatar-inner">
+                <span class="material-symbols-outlined material-symbols-outlined--sm">person</span>
+              </div>
+            </div>
+            <div>
+              <p class="side-menu__user-name">Admin User</p>
+              <p class="side-menu__user-mail">admin@storeroom.local</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+ 
+  <!-- Navigation Menu Overlay 
+  <div class="menu-overlay" id="menu-overlay">
+    <div class="menu-panel" id="menu-content">
+      <div class="menu-list">
+        <button class="menu-item is-active" type="button" onclick="toggleMenu()">
+          <span class="material-symbols-outlined">grid_view</span>
+          <span class="menu-item__label">Dashboard</span>
+        </button>
+        <a class="menu-item" href="./history.html" onclick="toggleMenu()">
+          <span class="material-symbols-outlined">analytics</span>
+          <span class="menu-item__label">Activity Log</span>
+        </a>
+        <button class="menu-item" type="button" onclick="toggleMenu()">
+          <span class="material-symbols-outlined">settings</span>
+          <span class="menu-item__label">Settings</span>
+        </button>
+      </div>
+
+      <div class="menu-footer">
+        <div class="menu-footer__row">
+          <div class="menu-footer__dot"></div>
+          <span class="menu-footer__cap">System Online</span>
+        </div>
+        <p class="menu-footer__ver">v1.2.0-stable</p>
+      </div>
+    </div>
+    <div class="menu-overlay__rest" onclick="toggleMenu()"></div>
+  </div>
+-->
+
+
+  <!-- Header -->
+  <header class="app-header" id="header-bg">
+    <!-- Decorative blobs -->
+    <div class="blob blob--tr"></div>
+    <div class="blob blob--bl"></div>
+
+    <div class="app-header__bar">
+      <button class="icon-btn-glass" id="menu-toggle-btn" type="button" onclick="toggleMenu()" aria-label="Open menu">
+        <span class="material-symbols-outlined" id="menu-icon">menu</span>
+      </button>
+
+      <!-- Theme toggle -->
+      <div class="pill-group">
+        <button class="pill-btn pill-btn--icon" id="btn-theme-light" type="button" onclick="setTheme('light')" aria-label="Light theme">
+          <span class="material-symbols-outlined">light_mode</span>
+        </button>
+        <button class="pill-btn pill-btn--icon is-active-dark" id="btn-theme-dark" type="button" onclick="setTheme('dark')" aria-label="Dark theme">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+      </div>
+    </div>
+
+    <div class="app-header__body">
+
+      <!-- Logo (above the Auto/Manual toggle) -->
+      <div class="logo-badge">
+        <img id="app-logo" src="./website/photo/freezy.svg" alt="Logo"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';" />
+        <span class="logo-badge__fallback" style="display:none;">
+          <span class="material-symbols-outlined">home</span>
+        </span>
+      </div>
+
+      <!-- Auto / Manual toggle -->
+      <div class="pill-group">
+        <button class="pill-btn" id="btn-auto" type="button" onclick="setMode('auto')">
+          <span class="dot"></span> AUTO
+        </button>
+        <button class="pill-btn is-active-manual" id="btn-manual" type="button" onclick="setMode('manual')">
+          <span class="dot"></span> MANUAL
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main content -->
+  <main class="app-main">
+
+    <!-- Sensor card -->
+    <section class="sensor-card">
+      <div class="sensor-grid">
+        <div class="sensor-cell">
+          <div class="sensor-value zone-warm" id="temp-value">28.2°C</div>
+          <div class="sensor-label zone-warm" id="temp-zone">warm</div>
+        </div>
+        <div class="sensor-cell">
+          <div class="sensor-value text-primary" id="humidity-value">62%</div>
+          <div class="sensor-label">Humidity</div>
+        </div>
+        <div class="sensor-cell">
+          <div class="sensor-value text-secondary" id="occ-value">Yes</div>
+          <div class="sensor-label">Occupied</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mode banner -->
+    <div class="mode-banner mode-manual" id="mode-banner">
+      <span class="mode-banner__icon" id="mode-icon">✋</span>
+      <span class="mode-banner__text" id="mode-text">Manual — you are in full control</span>
+    </div>
+
+    <!-- Radar / Occupancy card -->
+    <section class="radar-card">
+      <div class="radar-card__left">
+        <div class="radar-icon"><span class="material-symbols-outlined">radar</span></div>
+        <div>
+          <div class="radar-title">Radar Detection</div>
+          <div class="radar-sub">Rd-03D mmWave sensor</div>
+        </div>
+      </div>
+      <div class="radar-pill is-detected" id="radar-pill">
+        <span class="radar-pill__dot pulse-dot" id="radar-dot"></span>
+        <span id="radar-text">Detected</span>
+      </div>
+    </section>
+
+    <h3 class="section-eyebrow">Devices</h3>
+
+    <!-- Device Grid -->
+    <div class="device-grid">
+
+      <!-- Lighting -->
+      <div class="device-card" id="card-light">
+        <div class="device-card__head">
+          <div class="device-icon-box" id="light-icon-container">
+            <span class="material-symbols-outlined device-icon" id="light-icon">lightbulb</span>
+          </div>
+          <button class="power-btn" type="button" onclick="toggleDevice('light')" aria-label="Toggle light">
+            <span class="material-symbols-outlined size-sm">power_settings_new</span>
+          </button>
+        </div>
+        <div class="device-title">Lighting</div>
+        <div class="device-meta">Devices : 1</div>
+        <div class="status-pill" id="light-pill">Off</div>
+        <div class="auto-label">Auto</div>
+      </div>
+
+      <!-- HVAC -->
+      <div class="device-card" id="card-fan">
+        <div class="device-card__head">
+          <div class="device-icon-box" id="fan-icon-container">
+            <span class="material-symbols-outlined device-icon" id="fan-icon">mode_fan</span>
+          </div>
+          <button class="power-btn" type="button" onclick="toggleDevice('fan')" aria-label="Toggle fan">
+            <span class="material-symbols-outlined size-sm">power_settings_new</span>
+          </button>
+        </div>
+        <div class="device-title">HVAC</div>
+        <div class="device-meta">Devices : 1</div>
+        <div class="status-pill" id="fan-pill">Off</div>
+        <div class="auto-label">Auto</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="./main.js"></script>
+</body>
+</html>

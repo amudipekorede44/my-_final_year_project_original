@@ -1,0 +1,262 @@
+   * {
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
+        font-family: 'Times New Roman', Times, serif;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+        --accent: #875fa9;
+        --accent-soft: #48578b7c;
+        --ink: #220a49;
+        --line: #4c3775;
+        --page: #e9efec;
+    }
+
+    html, body {
+        background: var(--page);
+    }
+
+    /* Center the phone frame on larger screens; edge-to-edge on phones */
+    body {
+        min-height: 100dvh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background:
+            radial-gradient(120% 80% at 50% -10%, #cfe0d8 0%, var(--page) 60%);
+        padding: 16px;
+    }
+
+    .app {
+        position: relative;
+        width: 100%;
+        max-width: 380px;
+        min-height: 100dvh;
+        background: linear-gradient(160deg, #f7faf8 0%, #e6efe9 100%);
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    /* Device frame only on wider viewports */
+    @media (min-width: 400px) {
+        .app {
+            min-height: 760px;
+            height: 760px;
+            border-radius: 32px;
+            border: 1px solid rgba(0, 0, 0, 0.12);
+            box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.45);
+        }
+    }
+
+    .hero {
+        padding: 44px 28px 28px;
+        text-align: center;
+    }
+
+    .logo {
+        width: 84px;
+        height: 84px;
+        margin: 0 auto 18px;
+        border-radius: 22px;
+        background: #ffffff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 26px -10px rgba(53, 106, 87, 0.55);
+        overflow: hidden;
+    }
+
+    .logo img {
+        width: 200%;
+        height: 1000%;
+        object-fit: center;
+    }
+
+    /* Fallback monogram shown if the logo image is missing */
+    .logo-fallback {
+        display: none;
+        font-size: 40px;
+        font-weight: 700;
+        color: var(--accent);
+        letter-spacing: 1px;
+    }
+
+    .span {
+        font-size: 38px;
+        letter-spacing: 2px;
+        color: var(--accent);
+    }
+
+    .span span {
+        display: inline-block;
+        font-weight: 400;
+        animation: mover 4s linear infinite;
+    }
+
+    @keyframes mover {
+        0%   { text-shadow: 0 0 30px rgba(53, 106, 87, 0); transform: translateY(0); }
+        50%  { text-shadow: 0 0 24px rgba(53, 106, 87, 0.35); transform: translateY(6px); }
+        100% { text-shadow: 0 0 30px rgba(53, 106, 87, 0); transform: translateY(0); }
+    }
+
+    .span span:nth-child(1) { animation-delay: 0.0s; }
+    .span span:nth-child(2) { animation-delay: 0.4s; }
+    .span span:nth-child(3) { animation-delay: 0.8s; }
+    .span span:nth-child(4) { animation-delay: 1.2s; }
+    .span span:nth-child(5) { animation-delay: 1.6s; }
+    .span span:nth-child(6) { animation-delay: 2.0s; }
+    .span span:nth-child(7) { animation-delay: 2.4s; }
+
+    .hero p {
+        margin-top: 8px;
+        font-size: 16px;
+        color: #695084;
+    }
+
+    /* ---------- Card ---------- */
+    .container {
+        flex: 1;
+        margin-top: 8px;
+        background: #ffffff;
+        border-top-left-radius: 28px;
+        border-top-right-radius: 28px;
+        box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.06);
+        padding: 32px 28px calc(32px + env(safe-area-inset-bottom));
+        display: flex;
+        flex-direction: column;
+    }
+
+    h2 {
+        font-size: 28px;
+        font-weight: 400;
+        text-align: center;
+        letter-spacing: 1px;
+        margin-bottom: 24px;
+        color: var(--ink);
+    }
+
+    /* ---------- Inputs ---------- */
+    .input {
+        position: relative;
+        margin: 22px 0;
+        border-bottom: 2px solid var(--line);
+    }
+
+    .input input {
+        width: 100%;
+        height: 40px;
+        background: transparent;
+        border: none;
+        outline: none;
+        font-size: 16px;
+        padding: 0 4px;
+        color: var(--ink);
+    }
+
+    .input label {
+        position: absolute;
+        top: 50%;
+        left: 4px;
+        transform: translateY(-50%);
+        font-size: 16px;
+        color: #7a8a82;
+        pointer-events: none;
+        transition: 0.2s ease;
+    }
+
+    .input input:focus ~ label,
+    .input input:valid ~ label {
+        top: -10px;
+        font-size: 13px;
+        color: var(--accent);
+        transform: none;
+    }
+
+    .input input:focus {
+        border-color: var(--accent);
+    }
+
+    /* ---------- Options row ---------- */
+    .acc {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 6px;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .acc label {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 14px;
+        color: #4a5a52;
+        cursor: pointer;
+    }
+
+    .acc a {
+        font-size: 14px;
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    .acc a:hover { text-decoration: underline; }
+
+    /* ---------- Button ---------- */
+    .btn {
+        width: 100%;
+        height: 50px;
+        margin-top: 28px;
+        color: #fff;
+        border: none;
+        border-radius: 14px;
+        font-weight: 600;
+        font-size: 17px;
+        letter-spacing: 1px;
+        background: var(--accent);
+        cursor: pointer;
+        transition: transform 0.15s ease, box-shadow 0.2s ease;
+        box-shadow: 0 8px 18px -6px rgba(53, 106, 87, 0.6);
+    }
+
+    .btn:active { transform: scale(0.98); }
+    .btn:hover { box-shadow: 0 10px 22px -6px rgba(53, 106, 87, 0.7); }
+
+    /* ---------- Footer link ---------- */
+    .ata {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-top: 24px;
+        font-size: 14px;
+        color: #4a5a52;
+    }
+
+    .ata a {
+        font-weight: 600;
+        color: var(--accent);
+        text-decoration: none;
+    }
+
+    .ata a:hover { text-decoration: underline; }
+
+    .divider {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin: 22px 0 4px;
+        color: #9aa8a1;
+        font-size: 13px;
+    }
+
+    .divider::before,
+    .divider::after {
+        content: "";
+        flex: 1;
+        height: 1px;
+        background: #dde5e1;
+    }

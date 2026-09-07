@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Power Analytics</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Rajdhani:wght@600;700&display=swap" />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+
+  <link rel="stylesheet" href="./css/power.css" />
+</head>
+<body>
+
+<div class="page-wrap">
+  <div class="app-shell" id="main-container">
+
+    <!-- Side Menu Overlay (scoped to frame) -->
+    <div class="side-menu-overlay" id="side-menu-overlay" onclick="toggleMenu()">
+      <aside class="side-menu" id="side-menu" onclick="event.stopPropagation()">
+        <div class="side-menu__top">
+          <div class="side-menu__brand">
+            <div class="side-menu__brand-icon">
+              <span class="material-symbols-outlined">analytics</span>
+            </div>
+            <span class="side-menu__brand-title">Menu</span>
+          </div>
+          <button class="side-menu__close" type="button" onclick="toggleMenu()" aria-label="Close menu">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <nav class="side-menu__nav">
+          <a class="nav-link" href="./main.html">
+            <span class="material-symbols-outlined">grid_view</span>
+            <span>Dashboard</span>
+          </a>
+          <a class="nav-link" href="./history.html">
+            <span class="material-symbols-outlined">analytics</span>
+            <span>Activity Log</span>
+          </a>
+          <a class="nav-link nav-link--active" href="./power.html">
+            <span class="material-symbols-outlined material-symbols-outlined--filled">show_chart</span>
+            <span>Chart</span>
+          </a>
+        </nav>
+
+        <div class="side-menu__footer">
+          <div class="side-menu__user">
+            <div class="side-menu__avatar">
+              <div class="side-menu__avatar-inner">
+                <span class="material-symbols-outlined material-symbols-outlined--sm">person</span>
+              </div>
+            </div>
+            <div>
+              <p class="side-menu__user-name">Admin User</p>
+              <p class="side-menu__user-mail">admin@storeroom.local</p>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <!-- Header -->
+    <header class="app-header">
+      <div class="app-header__bar">
+        <button class="icon-btn icon-btn--glass" type="button" onclick="toggleMenu()" aria-label="Open menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="app-header__actions">
+          <button class="icon-btn icon-btn--glass" id="theme-toggle" type="button" aria-label="Toggle theme">
+            <span class="material-symbols-outlined">dark_mode</span>
+          </button>
+        </div>
+      </div>
+      <div class="app-header__title-wrap">
+        <h1 class="app-header__title">Power Analytics</h1>
+      </div>
+      <div class="app-header__fade"></div>
+    </header>
+
+    <!-- Main content -->
+    <main class="app-main">
+
+      <!-- Current Load -->
+      <section class="glass-effect metric-card">
+        <span class="label-uppercase">Current Load</span>
+        <div class="status-pill">
+          <span class="status-dot status-pulse"></span>
+          <span>Optimal Performance</span>
+        </div>
+      </section>
+
+      <!-- Activity (24h) chart -->
+      <section class="glass-effect chart-card">
+        <div class="chart-card__header">
+          <h3 class="chart-card__title">Activity (24h)</h3>
+          <span class="chart-legend">
+            <span class="chart-legend__dot"></span> Line
+          </span>
+        </div>
+        <div class="chart-canvas">
+          <svg preserveAspectRatio="none" viewBox="0 0 400 150">
+            <defs>
+              <linearGradient id="chartGradient" x1="0" x2="0" y1="0" y2="1">
+                <stop offset="0%" stop-color="#b9c3ff" stop-opacity="0.3"></stop>
+                <stop offset="100%" stop-color="#b9c3ff" stop-opacity="0"></stop>
+              </linearGradient>
+            </defs>
+            <path d="M0,130 L40,110 L80,120 L120,80 L160,95 L200,60 L240,70 L280,40 L320,55 L360,30 L400,45 L400,150 L0,150 Z"
+                  fill="url(#chartGradient)"></path>
+            <path class="chart-path"
+                  d="M0,130 L40,110 L80,120 L120,80 L160,95 L200,60 L240,70 L280,40 L320,55 L360,30 L400,45"
+                  fill="none" stroke="#b9c3ff" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+          </svg>
+          <div class="chart-axis">
+            <span>00:00</span>
+            <span>08:00</span>
+            <span>16:00</span>
+            <span>Now</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Source Breakdown -->
+      <section>
+        <h3 class="section-title">Source Breakdown</h3>
+        <div class="source-grid">
+          <div class="glass-effect source-card source-card--hvac">
+            <div class="source-card__row">
+              <span class="material-symbols-outlined material-symbols-outlined--filled source-card__icon">hvac</span>
+              <span class="source-card__value">64%</span>
+            </div>
+            <p class="source-card__label">HVAC System</p>
+            <div class="source-card__bar">
+              <div class="source-card__bar-fill" style="width: 64%"></div>
+            </div>
+          </div>
+          <div class="glass-effect source-card source-card--light">
+            <div class="source-card__row">
+              <span class="material-symbols-outlined material-symbols-outlined--filled source-card__icon">lightbulb</span>
+              <span class="source-card__value">22%</span>
+            </div>
+            <p class="source-card__label">Lighting</p>
+            <div class="source-card__bar">
+              <div class="source-card__bar-fill" style="width: 22%"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<script src="./power.js"></script>
+</body>
+</html>

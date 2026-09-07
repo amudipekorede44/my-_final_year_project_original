@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Login</title>
+<link rel="stylesheet" href="./css/login.css">
+</head>
+
+<body>
+    <div class="app">
+        <div class="hero">
+            <div class="logo">
+                <img src="./photo/freezy.svg" alt="Logo"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <span class="logo-fallback"></span>
+            </div>
+            <div class="span">
+                <span>W</span><span>E</span><span>L</span><span>C</span><span>O</span><span>M</span><span>E</span>
+            </div>
+            <p>Sign in to continue</p>
+        </div>
+
+        <div class="container">
+            <form onsubmit="return false;">
+                <h2>LOGIN</h2>
+
+                <div class="input">
+                    <input type="text" id="name" required>
+                    <label for="name">USERNAME</label>
+                </div>
+
+                <div class="input">
+                    <input type="password" id="password" required>
+                    <label for="password">PASSWORD</label>
+                </div>
+
+                <div class="acc">
+                    <label><input type="checkbox"> Remember me</label>
+                    <a href="#">Forgot password?</a>
+                </div>
+
+                <button class="btn" type="submit">SIGN IN</button>
+
+                <div class="divider">or</div>
+
+                <div class="ata">
+                    <span>Don't have an account?</span>
+                    <a href="index3.html" id="submit">REGISTER</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

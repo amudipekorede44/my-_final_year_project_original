@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html class="dark" lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>Activity Log | Store Room</title>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&family=Rajdhani:wght@600;700&family=JetBrains+Mono&display=swap" />
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
+
+  <link rel="stylesheet" href="./css/history.css" />
+</head>
+<body>
+
+<div class="app-shell">
+
+  <!-- Side Menu Overlay -->
+  <div class="side-menu-overlay" id="side-menu-overlay" onclick="toggleMenu()">
+    <aside class="side-menu" id="side-menu" onclick="event.stopPropagation()">
+      <div class="side-menu__top">
+        <div class="side-menu__brand">
+          <div class="side-menu__brand-icon">
+            <span class="material-symbols-outlined">analytics</span>
+          </div>
+          <span class="side-menu__brand-title">Menu</span>
+        </div>
+        <button class="side-menu__close" type="button" onclick="toggleMenu()" aria-label="Close menu">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <nav class="side-menu__nav">
+        <a class="nav-link" href="./main.html">
+          <span class="material-symbols-outlined">grid_view</span>
+          <span>Dashboard</span>
+        </a>
+        <a class="nav-link nav-link--active" href="./history.html">
+          <span class="material-symbols-outlined filled">analytics</span>
+          <span>Activity Log</span>
+        </a>
+        <a class="nav-link" href="./power.html">
+          <span class="material-symbols-outlined">show_chart</span>
+          <span>Chart</span>
+        </a>
+      </nav>
+
+      <div class="side-menu__footer">
+        <div class="side-menu__user">
+          <div class="side-menu__avatar">
+            <div class="side-menu__avatar-inner">
+              <span class="material-symbols-outlined size-sm">person</span>
+            </div>
+          </div>
+          <div>
+            <p class="side-menu__user-name">Admin User</p>
+            <p class="side-menu__user-mail">admin@storeroom.local</p>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Top App Bar -->
+  <header class="app-header">
+    <div class="app-header__bar">
+      <button class="app-header__menu-btn" type="button" onclick="toggleMenu()" aria-label="Open menu">
+        <span class="material-symbols-outlined">menu</span>
+      </button>
+      <div class="theme-toggle">
+        <button class="theme-toggle__btn" id="btn-theme-light" type="button" onclick="setTheme('light')" aria-label="Light theme">
+          <span class="material-symbols-outlined">light_mode</span>
+        </button>
+        <button class="theme-toggle__btn is-dark-active" id="btn-theme-dark" type="button" onclick="setTheme('dark')" aria-label="Dark theme">
+          <span class="material-symbols-outlined">dark_mode</span>
+        </button>
+      </div>
+    </div>
+    <div class="app-header__title-wrap">
+      <h1 class="app-header__title">Activity Log</h1>
+      <p class="app-header__sub">Real-time device events</p>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="app-main">
+
+    <!-- Search + stats card -->
+    <section class="glass top-card">
+      <div class="search-bar">
+        <span class="material-symbols-outlined search-bar__icon">search</span>
+        <input type="text" id="log-search" placeholder="Search events..." />
+      </div>
+      <div class="stats-grid">
+        <div class="stat-tile">
+          <p class="stat-tile__label">Total</p>
+          <p class="stat-tile__value primary" id="stat-total">50</p>
+        </div>
+        <div class="stat-tile">
+          <p class="stat-tile__label">On</p>
+          <div class="stat-tile__on-row">
+            <span class="status-dot status-dot-pulse"></span>
+            <p class="stat-tile__value green" id="stat-on">24</p>
+          </div>
+        </div>
+        <div class="stat-tile">
+          <p class="stat-tile__label">Off</p>
+          <p class="stat-tile__value secondary" id="stat-off">26</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Filter chips -->
+    <div class="filter-row no-scrollbar">
+      <button class="filter-chip is-active" data-filter="all" type="button">All Activity</button>
+      <button class="filter-chip" data-filter="Lighting" type="button">
+        <span class="filter-chip__dot tertiary"></span> Lighting
+      </button>
+      <button class="filter-chip" data-filter="HVAC" type="button">
+        <span class="filter-chip__dot secondary"></span> HVAC
+      </button>
+    </div>
+
+    <!-- Log table -->
+    <section class="glass log-card">
+      <div class="log-card__scroll no-scrollbar">
+        <table class="log-table" id="log-table">
+          <thead>
+            <tr>
+              <th>Event</th>
+              <th>Device</th>
+              <th class="time-col">Time</th>
+              <th class="right">Status</th>
+            </tr>
+          </thead>
+          <tbody id="log-table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Scroll-to-top FAB -->
+    <button class="scroll-top" id="scroll-top" type="button" aria-label="Scroll to top">
+      <span class="material-symbols-outlined">north</span>
+    </button>
+  </main>
+</div>
+
+<script src="./history.js"></script>
+</body>
+</html>

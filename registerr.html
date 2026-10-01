@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Login</title>
+<title>Register</title>
 <link rel="stylesheet" href="../css/login.css">
 </head>
 
@@ -16,43 +16,43 @@
                 <span class="logo-fallback"></span>
             </div>
             <div class="span">
-                <span>W</span><span>E</span><span>L</span><span>C</span><span>O</span><span>M</span><span>E</span>
+                <span>J</span><span>O</span><span>I</span><span>N</span>
             </div>
-            <p>Sign in to continue</p>
+            <p>Create an account to get started</p>
         </div>
 
         <div class="container">
             <form onsubmit="return false;">
-                <h2>LOGIN</h2>
+                <h2>REGISTER</h2>
 
                 <div class="input">
-                    <input type="text" id="name" required>
-                    <label for="name">USERNAME</label>
+                    <input type="text" id="reg-username" required>
+                    <label for="reg-username">USERNAME</label>
                 </div>
 
                 <div class="input">
-                    <input type="password" id="password" required>
-                    <label for="password">PASSWORD</label>
+                    <input type="password" id="reg-password" required>
+                    <label for="reg-password">PASSWORD</label>
                 </div>
 
-                <div class="acc">
-                    <label><input type="checkbox"> Remember me</label>
-                    <a href="#">Forgot password?</a>
+                <div class="input">
+                    <input type="password" id="reg-confirm-password" required>
+                    <label for="reg-confirm-password">CONFIRM PASSWORD</label>
                 </div>
 
-                <button class="btn" type="submit">SIGN IN</button>
+                <button class="btn" type="submit">CREATE ACCOUNT</button>
 
                 <div class="divider">or</div>
 
                 <div class="ata">
-                    <span>Don't have an account?</span>
-                    <a href="index3.html" id="submit">REGISTER</a>
+                    <span>Already have an account?</span>
+                    <a href="login.html" id="submit">LOGIN</a>
                 </div>
             </form>
         </div>
     </div>
 
     <script type="module" src="./firebaseConfig.js"></script>
-    <script type="module" src="./login.js"></script>
+    <script type="module" src="./register1.js"></script>
 </body>
 </html>

@@ -13,9 +13,11 @@
   <link rel="stylesheet"
         href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" />
 
-  <link rel="stylesheet" href="./css/main.css" />
+  <script src="./theme.js"></script>
+
+  <link rel="stylesheet" href="../css/main.css" />
 </head>
-<body class="manual-mode">
+<body class="auto-mode">
 
 <div class="main-container" id="content-wrapper">
   <div class="side-menu-overlay" id="side-menu-overlay" onclick="toggleMenu()">
@@ -62,36 +64,6 @@
         </div>
       </aside>
     </div>
- 
-  <!-- Navigation Menu Overlay 
-  <div class="menu-overlay" id="menu-overlay">
-    <div class="menu-panel" id="menu-content">
-      <div class="menu-list">
-        <button class="menu-item is-active" type="button" onclick="toggleMenu()">
-          <span class="material-symbols-outlined">grid_view</span>
-          <span class="menu-item__label">Dashboard</span>
-        </button>
-        <a class="menu-item" href="./history.html" onclick="toggleMenu()">
-          <span class="material-symbols-outlined">analytics</span>
-          <span class="menu-item__label">Activity Log</span>
-        </a>
-        <button class="menu-item" type="button" onclick="toggleMenu()">
-          <span class="material-symbols-outlined">settings</span>
-          <span class="menu-item__label">Settings</span>
-        </button>
-      </div>
-
-      <div class="menu-footer">
-        <div class="menu-footer__row">
-          <div class="menu-footer__dot"></div>
-          <span class="menu-footer__cap">System Online</span>
-        </div>
-        <p class="menu-footer__ver">v1.2.0-stable</p>
-      </div>
-    </div>
-    <div class="menu-overlay__rest" onclick="toggleMenu()"></div>
-  </div>
--->
 
 
   <!-- Header -->
@@ -120,7 +92,7 @@
 
       <!-- Logo (above the Auto/Manual toggle) -->
       <div class="logo-badge">
-        <img id="app-logo" src="./website/photo/freezy.svg" alt="Logo"
+        <img id="app-logo" src="./photo/freezy.svg" alt="Logo"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-flex';" />
         <span class="logo-badge__fallback" style="display:none;">
           <span class="material-symbols-outlined">home</span>
@@ -129,10 +101,10 @@
 
       <!-- Auto / Manual toggle -->
       <div class="pill-group">
-        <button class="pill-btn" id="btn-auto" type="button" onclick="setMode('auto')">
+        <button class="pill-btn is-active-auto" id="btn-auto" type="button" onclick="setMode('auto')">
           <span class="dot"></span> AUTO
         </button>
-        <button class="pill-btn is-active-manual" id="btn-manual" type="button" onclick="setMode('manual')">
+        <button class="pill-btn" id="btn-manual" type="button" onclick="setMode('manual')">
           <span class="dot"></span> MANUAL
         </button>
       </div>
@@ -146,24 +118,24 @@
     <section class="sensor-card">
       <div class="sensor-grid">
         <div class="sensor-cell">
-          <div class="sensor-value zone-warm" id="temp-value">28.2°C</div>
-          <div class="sensor-label zone-warm" id="temp-zone">warm</div>
+          <div class="sensor-value zone-cool" id="temp-value">--°C</div>
+          <div class="sensor-label zone-cool" id="temp-zone">cool</div>
         </div>
         <div class="sensor-cell">
-          <div class="sensor-value text-primary" id="humidity-value">62%</div>
+          <div class="sensor-value text-primary" id="humidity-value">--%</div>
           <div class="sensor-label">Humidity</div>
         </div>
         <div class="sensor-cell">
-          <div class="sensor-value text-secondary" id="occ-value">Yes</div>
+          <div class="sensor-value text-secondary" id="occ-value">No</div>
           <div class="sensor-label">Occupied</div>
         </div>
       </div>
     </section>
 
     <!-- Mode banner -->
-    <div class="mode-banner mode-manual" id="mode-banner">
-      <span class="mode-banner__icon" id="mode-icon">✋</span>
-      <span class="mode-banner__text" id="mode-text">Manual — you are in full control</span>
+    <div class="mode-banner mode-auto" id="mode-banner">
+      <span class="mode-banner__icon" id="mode-icon">🤖</span>
+      <span class="mode-banner__text" id="mode-text">Waiting for the controller…</span>
     </div>
 
     <!-- Radar / Occupancy card -->
@@ -172,12 +144,12 @@
         <div class="radar-icon"><span class="material-symbols-outlined">radar</span></div>
         <div>
           <div class="radar-title">Radar Detection</div>
-          <div class="radar-sub">Rd-03D mmWave sensor</div>
+          <div class="radar-sub" id="radar-sub">Rd-03D mmWave sensor</div>
         </div>
       </div>
-      <div class="radar-pill is-detected" id="radar-pill">
+      <div class="radar-pill is-empty" id="radar-pill">
         <span class="radar-pill__dot pulse-dot" id="radar-dot"></span>
-        <span id="radar-text">Detected</span>
+        <span id="radar-text">Offline</span>
       </div>
     </section>
 
@@ -199,7 +171,7 @@
         <div class="device-title">Lighting</div>
         <div class="device-meta">Devices : 1</div>
         <div class="status-pill" id="light-pill">Off</div>
-        <div class="auto-label">Auto</div>
+        <div class="auto-label" id="light-mode-label">Auto</div>
       </div>
 
       <!-- HVAC -->
@@ -215,12 +187,159 @@
         <div class="device-title">HVAC</div>
         <div class="device-meta">Devices : 1</div>
         <div class="status-pill" id="fan-pill">Off</div>
-        <div class="auto-label">Auto</div>
+        <div class="auto-label" id="fan-mode-label">Auto</div>
       </div>
     </div>
   </main>
 </div>
-
+  `
 <script src="./main.js"></script>
+
+<script type="module">
+  // ------------------------------------------------------------------
+  // Live link to the ESP32. Readings come down, button presses go up.
+  //   lightOverride / fanOverride  true  = that device follows the app
+  //                                false = that device follows the sensors
+  //   lightManualValue / fanManualValue  what the app wants it to be
+  // ------------------------------------------------------------------
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getDatabase, ref, onValue, set, update, push as fbPush } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCyuUG7eYY-YAFrTcyH4odbcV0DO-bBtdg",
+    authDomain: "my-project-name-7e236.firebaseapp.com",
+    databaseURL: "https://my-project-name-7e236-default-rtdb.firebaseio.com",
+    projectId: "my-project-name-7e236",
+  };
+
+  const ROOM = "/rooms/room1";
+
+  const app = initializeApp(firebaseConfig);
+  const db = getDatabase(app);
+  const auth = getAuth(app);
+
+  const roomRef = ref(db, ROOM);
+  const activityRef = ref(db, "/activity/room1");
+  const pending = [];
+
+  let lastLoggedLight = null;
+  let lastLoggedFan = null;
+
+  function parseBool(val) {
+    if (typeof val === 'boolean') return val;
+    if (typeof val === 'number') return val > 0;
+    if (typeof val === 'string') {
+      const s = val.trim().toLowerCase();
+      return s === 'true' || s === '1' || s === 'on' || s === 'present' || s === 'yes';
+    }
+    return false;
+  }
+
+  function recordActivity(device, isOn, isManual) {
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const isLight = device === 'light';
+    fbPush(activityRef, {
+      name: isLight ? 'Light' : 'Fan',
+      type: isLight ? 'Lighting' : 'Fan',
+      status: isOn ? 'ON' : 'OFF',
+      icon: isLight ? 'lightbulb' : 'mode_fan',
+      mode: isManual ? 'Manual' : 'Auto',
+      timestamp: Date.now(),
+      time: timeStr
+    }).catch(err => console.error("Error recording activity to Firebase:", err));
+  }
+
+  function push(payload) {
+    update(roomRef, payload).catch(err => {
+      console.error("Firebase write failed:", err);
+      pending.push(payload);
+    });
+  }
+
+  window.roomControl = {
+    // AUTO clears both overrides so the ESP32 follows the sensors.
+    setMode(mode, current) {
+      const manual = mode === "manual";
+      push({
+        mode:             mode,
+        manualModeActive: manual,
+        lightOverride:    manual,
+        fanOverride:      manual,
+        lightManualValue: manual ? !!(current && current.light) : false,
+        fanManualValue:   manual ? !!(current && current.fan)   : false,
+      });
+    },
+
+    // One device controlled manually.
+    setManual(device, on) {
+      push({
+        mode:                     "manual",
+        manualModeActive:         true,
+        [device + "Override"]:    true,
+        [device + "ManualValue"]: !!on,
+        [device]:                 !!on
+      });
+    },
+  };
+
+  // Kept so any older markup calling this still works.
+  window.firebaseSetOverride = function (device, on) {
+    window.roomControl.setManual(device, on);
+  };
+
+  // Listen directly to room data in Firebase Realtime Database
+  onValue(roomRef, (snapshot) => {
+    const data = snapshot.val();
+    if (data && window.applyRoomSnapshot) {
+      window.applyRoomSnapshot(data);
+
+      // Record activity in Firebase whenever light or fan state transitions
+      const curLight = parseBool(data.light);
+      const curFan   = parseBool(data.fan);
+      const isManual = !!(data.lightOverride || data.fanOverride || data.manualModeActive || data.mode === 'manual');
+
+      if (data.light !== undefined && data.light !== null) {
+        if (lastLoggedLight !== null && curLight !== lastLoggedLight) {
+          recordActivity('light', curLight, isManual);
+        }
+        lastLoggedLight = curLight;
+      }
+
+      if (data.fan !== undefined && data.fan !== null) {
+        if (lastLoggedFan !== null && curFan !== lastLoggedFan) {
+          recordActivity('fan', curFan, isManual);
+        }
+        lastLoggedFan = curFan;
+      }
+    }
+  }, (err) => {
+    console.error("Firebase Realtime Database read failed:", err);
+    if (window.setConnectionState) window.setConnectionState(false);
+  });
+
+  // Track Firebase connection state
+  onValue(ref(db, ".info/connected"), (snap) => {
+    const connected = !!snap.val();
+    if (window.setConnectionState) window.setConnectionState(connected);
+    if (connected && pending.length) {
+      while (pending.length) {
+        update(roomRef, pending.shift()).catch(console.error);
+      }
+    }
+  });
+
+  // Handle Authentication without blocking database listener
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      console.log("Firebase connected as user:", user.email || user.uid);
+    } else {
+      signInAnonymously(auth).catch((err) => {
+        console.warn("Firebase anonymous sign-in skipped/failed:", err.message);
+      });
+    }
+  });
+</script>
 </body>
 </html>

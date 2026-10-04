@@ -11,6 +11,14 @@ function toggleMenu() {
   menu.classList.toggle('open', isActive);
 }
 
+// Fallback logout handler
+window.handleLogout = window.handleLogout || function(e) {
+  if (e) e.preventDefault();
+  sessionStorage.clear();
+  localStorage.removeItem("user");
+  window.location.href = "../login.html";
+};
+
 // Shared theme handler
 if (typeof Theme === 'undefined') {
   console.warn('theme.js is not loaded — the theme will not be remembered between pages.');

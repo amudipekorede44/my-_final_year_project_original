@@ -454,6 +454,15 @@ html:not(.dark) .side-menu__close:hover { background: rgba(0, 0, 0, 0.05); }
   border: 1px solid rgba(0, 209, 167, 0.2);
   color: var(--secondary-fixed);
 }
+.nav-link--logout {
+  margin-top: auto;
+  color: #ff5c5c;
+  cursor: pointer;
+}
+.nav-link--logout:hover {
+  background: rgba(255, 92, 92, 0.12) !important;
+  color: #ff3b3b !important;
+}
 
 .side-menu__footer {
   margin-top: auto;

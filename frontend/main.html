@@ -47,6 +47,10 @@
             <span class="material-symbols-outlined material-symbols-outlined--filled">show_chart</span>
             <span>Chart</span>
           </a>
+          <a class="nav-link nav-link--logout" href="../login.html" onclick="handleLogout(event)">
+            <span class="material-symbols-outlined">logout</span>
+            <span>Log Out</span>
+          </a>
         </nav>
 
         <div class="side-menu__footer">
@@ -204,7 +208,7 @@
   // ------------------------------------------------------------------
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
   import { getDatabase, ref, onValue, set, update, push as fbPush } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
-  import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+  import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCyuUG7eYY-YAFrTcyH4odbcV0DO-bBtdg",
@@ -334,12 +338,31 @@
   onAuthStateChanged(auth, (user) => {
     if (user) {
       console.log("Firebase connected as user:", user.email || user.uid);
+      if (user.email) {
+        const mailEl = document.querySelector(".side-menu__user-mail");
+        const nameEl = document.querySelector(".side-menu__user-name");
+        if (mailEl) mailEl.textContent = user.email;
+        if (nameEl) nameEl.textContent = user.email.split("@")[0].toUpperCase();
+      }
     } else {
       signInAnonymously(auth).catch((err) => {
         console.warn("Firebase anonymous sign-in skipped/failed:", err.message);
       });
     }
   });
+
+  window.handleLogout = async (e) => {
+    if (e) e.preventDefault();
+    try {
+      await signOut(auth);
+    } catch (err) {
+      console.warn("Sign out error:", err);
+    } finally {
+      sessionStorage.clear();
+      localStorage.removeItem("user");
+      window.location.href = "../login.html";
+    }
+  };
 </script>
 </body>
 </html>

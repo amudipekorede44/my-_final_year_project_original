@@ -125,6 +125,14 @@ function toggleMenu() {
   menu.classList.toggle('open', isActive);
 }
 
+// Fallback logout handler
+window.handleLogout = window.handleLogout || function(e) {
+  if (e) e.preventDefault();
+  sessionStorage.clear();
+  localStorage.removeItem("user");
+  window.location.href = "../login.html";
+};
+
 // ---------- Responsive time column ----------
 function applyResponsiveColumns() {
   const hide = window.innerWidth < 400;

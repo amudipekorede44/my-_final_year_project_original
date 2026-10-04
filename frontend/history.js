@@ -43,7 +43,10 @@ function renderLogs() {
               <span class="log-event__icon">
                 <span class="material-symbols-outlined size-18">${item.icon}</span>
               </span>
-              <span class="log-event__name">${item.name}${modeLabel}</span>
+              <div class="log-event__details">
+                <span class="log-event__name">${item.name}${modeLabel}</span>
+                <span class="log-event__subtime">${item.time}</span>
+              </div>
             </div>
           </td>
           <td class="log-cell-type">${item.type}</td>
@@ -135,8 +138,7 @@ window.handleLogout = window.handleLogout || function(e) {
 
 // ---------- Responsive time column ----------
 function applyResponsiveColumns() {
-  const hide = window.innerWidth < 400;
-  logTable.classList.toggle('hide-time', hide);
+  if (logTable) logTable.classList.remove('hide-time');
 }
 
 // ---------- Init ----------

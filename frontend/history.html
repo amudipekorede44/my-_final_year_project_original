@@ -185,12 +185,19 @@
       Object.keys(data).forEach((key) => {
         const item = data[key];
         if (!item) return;
+        let formattedTime = (item.time && typeof item.time === 'string' && item.time.trim()) ? item.time : null;
+        if (!formattedTime && item.timestamp) {
+          const d = new Date(Number(item.timestamp));
+          if (!isNaN(d.getTime())) {
+            formattedTime = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+          }
+        }
         logs.push({
           id: key,
           name: item.name || (item.type === 'Fan' ? 'Fan' : 'Light'),
           type: item.type || (item.name === 'Fan' ? 'Fan' : 'Lighting'),
           status: (item.status || 'OFF').toUpperCase(),
-          time: item.time || (item.timestamp ? new Date(item.timestamp).toLocaleTimeString('en-GB') : '--:--:--'),
+          time: formattedTime || '--:--:--',
           timestamp: item.timestamp || 0,
           icon: item.icon || (item.type === 'Fan' || item.name === 'Fan' ? 'mode_fan' : 'lightbulb'),
           mode: item.mode || 'Auto'

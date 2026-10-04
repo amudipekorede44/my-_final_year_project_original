@@ -438,14 +438,30 @@ html:not(.dark) .log-table thead { background: rgba(241, 245, 249, 0.95); }
   color: var(--text-muted);
 }
 
-/* Hide time column on very narrow screens (controlled by JS) */
+/* Keep time column visible and neatly formatted on all screens */
 .log-table th.time-col,
 .log-table td.time-col {
-  display: table-cell;
+  display: table-cell !important;
+  white-space: nowrap;
 }
-.log-table.hide-time th.time-col,
-.log-table.hide-time td.time-col {
+
+.log-event__details {
+  display: flex;
+  flex-direction: column;
+}
+
+.log-event__subtime {
   display: none;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 1px;
+}
+
+@media (max-width: 480px) {
+  .log-event__subtime {
+    display: block;
+  }
 }
 
 .status-badge {

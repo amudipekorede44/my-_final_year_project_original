@@ -240,7 +240,32 @@
     return false;
   }
 
+  const lastActivityTimestamps = {
+    light: { state: null, time: 0 },
+    fan:   { state: null, time: 0 }
+  };
+
   function recordActivity(device, isOn, isManual) {
+    const nowMs = Date.now();
+    const record = lastActivityTimestamps[device];
+
+    // Deduplication guard: ignore duplicate writes for same state within 3.5 seconds
+    if (record && record.state === isOn && (nowMs - record.time < 3500)) {
+      return;
+    }
+
+    // Shared cross-tab/device localStorage check
+    try {
+      const lockKey = `smartroom_act_${device}`;
+      const saved = JSON.parse(localStorage.getItem(lockKey) || '{}');
+      if (saved.state === isOn && (nowMs - saved.time < 3500)) {
+        return;
+      }
+      localStorage.setItem(lockKey, JSON.stringify({ state: isOn, time: nowMs }));
+    } catch (e) {}
+
+    lastActivityTimestamps[device] = { state: isOn, time: nowMs };
+
     const now = new Date();
     const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     const isLight = device === 'light';
@@ -250,7 +275,7 @@
       status: isOn ? 'ON' : 'OFF',
       icon: isLight ? 'lightbulb' : 'mode_fan',
       mode: isManual ? 'Manual' : 'Auto',
-      timestamp: Date.now(),
+      timestamp: nowMs,
       time: timeStr
     }).catch(err => console.error("Error recording activity to Firebase:", err));
   }

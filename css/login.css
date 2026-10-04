@@ -70,9 +70,10 @@
     }
 
     .logo img {
-        width: 200%;
-        height: 1000%;
-        object-fit: center;
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
     }
 
     /* Fallback monogram shown if the logo image is missing */

@@ -14,6 +14,22 @@ const passwordInput = document.getElementById("reg-password");
 const confirmInput = document.getElementById("reg-confirm-password");
 const submitBtn = document.querySelector(".btn");
 
+// Setup password visibility toggles
+document.querySelectorAll(".toggle-password").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const container = btn.closest(".password-wrap") || btn.parentElement;
+    const input = container.querySelector("input");
+    if (!input) return;
+
+    const isPassword = input.type === "password";
+    input.type = isPassword ? "text" : "password";
+    btn.classList.toggle("is-visible", isPassword);
+    btn.setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
+    btn.setAttribute("title", isPassword ? "Hide password" : "Show password");
+    input.focus();
+  });
+});
+
 const errorBox = document.createElement("div");
 errorBox.style.cssText = "color:#ff5c5c; font-size:0.85rem; margin:8px 0; display:none;";
 form.insertBefore(errorBox, submitBtn);

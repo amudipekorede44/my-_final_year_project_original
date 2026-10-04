@@ -15,6 +15,22 @@ const usernameInput = document.getElementById("name");
 const passwordInput = document.getElementById("password");
 const submitBtn = document.querySelector(".btn");
 
+// Setup password visibility toggle
+document.querySelectorAll(".toggle-password").forEach((btn) => {
+  btn.addEventListener("click", () => {
+    const container = btn.closest(".password-wrap") || btn.parentElement;
+    const input = container.querySelector("input");
+    if (!input) return;
+
+    const isPassword = input.type === "password";
+    input.type = isPassword ? "text" : "password";
+    btn.classList.toggle("is-visible", isPassword);
+    btn.setAttribute("aria-label", isPassword ? "Hide password" : "Show password");
+    btn.setAttribute("title", isPassword ? "Hide password" : "Show password");
+    input.focus();
+  });
+});
+
 // Create (once) a small error message element, placed just above the Sign In button
 const errorBox = document.createElement("div");
 errorBox.className = "login-error";

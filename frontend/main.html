@@ -327,18 +327,19 @@
       // Record activity in Firebase whenever light or fan state transitions
       const curLight = parseBool(data.light);
       const curFan   = parseBool(data.fan);
-      const isManual = !!(data.lightOverride || data.fanOverride || data.manualModeActive || data.mode === 'manual');
+      const isLightManual = !!(data.lightOverride || data.manualModeActive || data.mode === 'manual');
+      const isFanManual   = !!(data.fanOverride   || data.manualModeActive || data.mode === 'manual');
 
       if (data.light !== undefined && data.light !== null) {
         if (lastLoggedLight !== null && curLight !== lastLoggedLight) {
-          recordActivity('light', curLight, isManual);
+          recordActivity('light', curLight, isLightManual);
         }
         lastLoggedLight = curLight;
       }
 
       if (data.fan !== undefined && data.fan !== null) {
         if (lastLoggedFan !== null && curFan !== lastLoggedFan) {
-          recordActivity('fan', curFan, isManual);
+          recordActivity('fan', curFan, isFanManual);
         }
         lastLoggedFan = curFan;
       }

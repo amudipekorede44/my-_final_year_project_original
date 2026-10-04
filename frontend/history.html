@@ -162,7 +162,7 @@
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-  import { getDatabase, ref, onValue, query, limitToLast } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+  import { getDatabase, ref, onValue, query, limitToLast, push as fbPush } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
   import { getAuth, signInAnonymously, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
   const firebaseConfig = {
@@ -234,6 +234,82 @@
     }
   }, (err) => {
     console.error("Error reading activity log from Firebase:", err);
+  });
+
+  // Track room state changes so Auto events are also recorded while on history page
+  const roomRef = ref(db, "/rooms/room1");
+  const activityRef = ref(db, "/activity/room1");
+  let lastLoggedLight = null;
+  let lastLoggedFan = null;
+  const lastActivityTimestamps = {
+    light: { state: null, time: 0 },
+    fan:   { state: null, time: 0 }
+  };
+
+  function parseBool(val) {
+    if (typeof val === 'boolean') return val;
+    if (typeof val === 'number') return val > 0;
+    if (typeof val === 'string') {
+      const s = val.trim().toLowerCase();
+      return s === 'true' || s === '1' || s === 'on' || s === 'present' || s === 'yes';
+    }
+    return false;
+  }
+
+  function recordActivity(device, isOn, isManual) {
+    const nowMs = Date.now();
+    const record = lastActivityTimestamps[device];
+
+    if (record && record.state === isOn) return;
+
+    try {
+      const lockKey = `smartroom_act_${device}`;
+      const saved = JSON.parse(localStorage.getItem(lockKey) || '{}');
+      if (saved.state === isOn && (nowMs - saved.time < 8000)) {
+        return;
+      }
+      localStorage.setItem(lockKey, JSON.stringify({ state: isOn, time: nowMs }));
+    } catch (e) {}
+
+    lastActivityTimestamps[device] = { state: isOn, time: nowMs };
+
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+    const isLight = device === 'light';
+    fbPush(activityRef, {
+      name: isLight ? 'Light' : 'Fan',
+      type: isLight ? 'Lighting' : 'Fan',
+      status: isOn ? 'ON' : 'OFF',
+      icon: isLight ? 'lightbulb' : 'mode_fan',
+      mode: isManual ? 'Manual' : 'Auto',
+      timestamp: nowMs,
+      time: timeStr
+    }).catch(err => console.error("Error recording activity from history page:", err));
+  }
+
+  onValue(roomRef, (snapshot) => {
+    const data = snapshot.val();
+    if (!data) return;
+
+    const curLight = parseBool(data.light);
+    const curFan   = parseBool(data.fan);
+
+    const isLightManual = !!(data.lightOverride || data.manualModeActive || data.mode === 'manual');
+    const isFanManual   = !!(data.fanOverride   || data.manualModeActive || data.mode === 'manual');
+
+    if (data.light !== undefined && data.light !== null) {
+      if (lastLoggedLight !== null && curLight !== lastLoggedLight) {
+        recordActivity('light', curLight, isLightManual);
+      }
+      lastLoggedLight = curLight;
+    }
+
+    if (data.fan !== undefined && data.fan !== null) {
+      if (lastLoggedFan !== null && curFan !== lastLoggedFan) {
+        recordActivity('fan', curFan, isFanManual);
+      }
+      lastLoggedFan = curFan;
+    }
   });
 
   onAuthStateChanged(auth, (user) => {

@@ -249,8 +249,8 @@
     const nowMs = Date.now();
     const record = lastActivityTimestamps[device];
 
-    // Deduplication guard: ignore duplicate writes for same state within 3.5 seconds
-    if (record && record.state === isOn && (nowMs - record.time < 3500)) {
+    // Ignore if already in this state, or within 10 seconds of same state
+    if (record && record.state === isOn) {
       return;
     }
 
@@ -258,7 +258,7 @@
     try {
       const lockKey = `smartroom_act_${device}`;
       const saved = JSON.parse(localStorage.getItem(lockKey) || '{}');
-      if (saved.state === isOn && (nowMs - saved.time < 3500)) {
+      if (saved.state === isOn && (nowMs - saved.time < 10000)) {
         return;
       }
       localStorage.setItem(lockKey, JSON.stringify({ state: isOn, time: nowMs }));

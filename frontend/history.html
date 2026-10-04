@@ -180,7 +180,7 @@
 
   onValue(activityQuery, (snapshot) => {
     const data = snapshot.val();
-    const logs = [];
+    const rawLogs = [];
     if (data) {
       Object.keys(data).forEach((key) => {
         const item = data[key];
@@ -192,22 +192,45 @@
             formattedTime = d.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
           }
         }
-        logs.push({
+        rawLogs.push({
           id: key,
           name: item.name || (item.type === 'Fan' ? 'Fan' : 'Light'),
           type: item.type || (item.name === 'Fan' ? 'Fan' : 'Lighting'),
           status: (item.status || 'OFF').toUpperCase(),
           time: formattedTime || '--:--:--',
-          timestamp: item.timestamp || 0,
+          timestamp: Number(item.timestamp) || 0,
           icon: item.icon || (item.type === 'Fan' || item.name === 'Fan' ? 'mode_fan' : 'lightbulb'),
           mode: item.mode || 'Auto'
         });
       });
+
       // Sort newest to oldest so recent events appear at top
-      logs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
-    }
-    if (window.setActivityData) {
-      window.setActivityData(logs);
+      rawLogs.sort((a, b) => (b.timestamp || 0) - (a.timestamp || 0));
+
+      // Filter out duplicate identical records for the same device & state within 8 seconds
+      const cleanLogs = [];
+      for (let i = 0; i < rawLogs.length; i++) {
+        const current = rawLogs[i];
+        const prev = cleanLogs[cleanLogs.length - 1]; // Already accepted entry
+        if (
+          prev &&
+          prev.name === current.name &&
+          prev.status === current.status &&
+          Math.abs((prev.timestamp || 0) - (current.timestamp || 0)) < 8000
+        ) {
+          // Duplicate operation within 8 seconds: skip it!
+          continue;
+        }
+        cleanLogs.push(current);
+      }
+
+      if (window.setActivityData) {
+        window.setActivityData(cleanLogs);
+      }
+    } else {
+      if (window.setActivityData) {
+        window.setActivityData([]);
+      }
     }
   }, (err) => {
     console.error("Error reading activity log from Firebase:", err);

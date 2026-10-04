@@ -438,10 +438,10 @@ html:not(.dark) .log-table thead { background: rgba(241, 245, 249, 0.95); }
   color: var(--text-muted);
 }
 
-/* Keep time column visible and neatly formatted on all screens */
+/* Responsive time column: Exactly one timestamp displayed on all devices */
 .log-table th.time-col,
 .log-table td.time-col {
-  display: table-cell !important;
+  display: table-cell;
   white-space: nowrap;
 }
 
@@ -459,6 +459,11 @@ html:not(.dark) .log-table thead { background: rgba(241, 245, 249, 0.95); }
 }
 
 @media (max-width: 480px) {
+  /* On mobile phones, hide the separate Time column and show the inline subtime instead */
+  .log-table th.time-col,
+  .log-table td.time-col {
+    display: none !important;
+  }
   .log-event__subtime {
     display: block;
   }
